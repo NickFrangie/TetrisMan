@@ -17,7 +17,8 @@ namespace Blocks
 
         public void SpawnBlock()
         {
-            Instantiate(TetrisBlocks[Random.Range(0, TetrisBlocks.Length)], transform.position, Quaternion.identity);
+            GameObject block = Instantiate(TetrisBlocks[Random.Range(0, TetrisBlocks.Length)], transform.position, Quaternion.identity) as GameObject;
+            block.GetComponent<TetrisBlock>().spawner = this;
         }
     }
 }

@@ -5,12 +5,14 @@ namespace Blocks
 {
     public class TetrisBlock : MonoBehaviour
     {
+        public Spawner spawner;
         public Vector3 RotationPoint;
         public float PreviousTime=0;
         public float FallTime = 0.8f;
         public static int height = 20;
         public static int width = 10;
-        
+
+        private static Transform[,] grid = new Transform[width, height];
         // Update is called once per frame
         void Update()
         {
@@ -25,10 +27,28 @@ namespace Blocks
                 transform.RotateAround(transform.TransformPoint(RotationPoint),new Vector3(0,0,1),90);
                 if(!ValidRotation()) transform.RotateAround(transform.TransformPoint(RotationPoint),new Vector3(0,0,1),-90);
             }
-            if (Time.time - PreviousTime > (Input.GetKeyDown(KeyCode.DownArrow) ? FallTime/10 : FallTime) && ValidMove(new Vector3(0, -1, 0)))
+            if (Time.time - PreviousTime > (Input.GetKeyDown(KeyCode.DownArrow) ? FallTime/10 : FallTime) )
             {
-                transform.position += new Vector3(0, -1, 0);
+                bool test = ValidMove(new Vector3(0, -1, 0));
+                if(test) transform.position += new Vector3(0, -1, 0);
+                else
+                {
+                    AddToGrid();
+                    spawner.SpawnBlock();
+                    this.enabled = false;
+                }
                 PreviousTime = Time.time;
+            }
+        }
+
+        void AddToGrid()
+        {
+            foreach (Transform child in transform)
+            {
+                var position = child.transform.position;
+                int roundedX = Mathf.RoundToInt(position.x );
+                int roundedY = Mathf.RoundToInt(position.y);
+                grid[roundedX, roundedY] = child;
             }
         }
 
@@ -40,7 +60,7 @@ namespace Blocks
                 int roundedX = Mathf.RoundToInt(tempPos.x );
                 int roundedY = Mathf.RoundToInt(tempPos.y);
 
-                if (roundedX < 0 || roundedX >= width || roundedY < 0 || roundedY >= height) return false;
+                if (roundedX < 0 || roundedX >= width || roundedY < 0 || roundedY >= height || grid[roundedX,roundedY] !=null) return false;
             }
             return true;
         }
@@ -49,10 +69,11 @@ namespace Blocks
         {
             foreach (Transform child in transform)
             {
-                int roundedX = Mathf.RoundToInt(child.transform.position.x );
-                int roundedY = Mathf.RoundToInt(child.transform.position.y);
+                var position = child.transform.position;
+                int roundedX = Mathf.RoundToInt(position.x );
+                int roundedY = Mathf.RoundToInt(position.y);
 
-                if (roundedX < 0 || roundedX >= width || roundedY < 0 || roundedY >= height) return false;
+                if (roundedX < 0 || roundedX >= width || roundedY < 0 || roundedY >= height || grid[roundedX,roundedY] !=null) return false;
             }
             return true;
         }

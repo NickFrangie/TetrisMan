@@ -300,7 +300,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1678563325}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5, y: 20, z: 0.09786119}
+  m_LocalPosition: {x: 5, y: 19, z: 0.09786119}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -320,9 +320,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TetrisBlocks:
-  - {fileID: 472569380232564438, guid: 914847ebc7aa16646a04182cd6612fcb, type: 3}
-  - {fileID: 2862111935741539027, guid: a00b92812bdd6e547b3cb0d79031712d, type: 3}
   - {fileID: 198513474574443485, guid: cd73daa749c0fd64da3281af836023c9, type: 3}
+  - {fileID: 2862111935741539027, guid: a00b92812bdd6e547b3cb0d79031712d, type: 3}
+  - {fileID: 472569380232564438, guid: 914847ebc7aa16646a04182cd6612fcb, type: 3}
 --- !u!1 &1682124658
 GameObject:
   m_ObjectHideFlags: 0
