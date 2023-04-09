@@ -37,9 +37,9 @@ AnimationClip:
   - curve:
     - time: 0
       value: {fileID: 654810549, guid: 88decd5d9ab565f47b39e335bfda5d0a, type: 3}
-    - time: 0.055555556
+    - time: 0.041666668
       value: {fileID: 1445829256, guid: 88decd5d9ab565f47b39e335bfda5d0a, type: 3}
-    - time: 0.11111111
+    - time: 0.125
       value: {fileID: -1683154565, guid: 88decd5d9ab565f47b39e335bfda5d0a, type: 3}
     attribute: m_Sprite
     path: GFX
@@ -52,7 +52,7 @@ AnimationClip:
     path: 
     classID: 114
     script: {fileID: 11500000, guid: 1b705107b7178f841a229af9ecf91d44, type: 3}
-  m_SampleRate: 18
+  m_SampleRate: 24
   m_WrapMode: 0
   m_Bounds:
     m_Center: {x: 0, y: 0, z: 0}
@@ -167,14 +167,14 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0.055555556
+  - time: 0.041666668
     functionName: JumpForce
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.055555556
+  - time: 0.041666668
     functionName: SpawnObject
     data: 
     objectReferenceParameter: {fileID: 0}
