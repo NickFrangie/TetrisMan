@@ -3,13 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace Blocks
+namespace Game.Blocks
 {
     public class Spawner : MonoBehaviour
     {
+        // Inspector
+        [Header("Spawning")]
         public GameObject[] TetrisBlocks;
         
-        // Start is called before the first frame update
+        // Temporary (TODO: Remove !!!)
+        public BlockController blockController;
+        
+
         void Start()
         {
             SpawnBlock();
@@ -18,7 +23,10 @@ namespace Blocks
         public void SpawnBlock()
         {
             GameObject block = Instantiate(TetrisBlocks[Random.Range(0, TetrisBlocks.Length)], transform.position, Quaternion.identity) as GameObject;
-            block.GetComponent<TetrisBlock>().spawner = this;
+            
+            TetrisBlock tetrisBlock = block.GetComponent<TetrisBlock>();
+            tetrisBlock.spawner = this;
+            blockController.activeBlock = tetrisBlock; 
         }
     }
 }
