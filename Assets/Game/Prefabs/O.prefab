@@ -300,9 +300,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd66172258cdfab4b82ac317de20b409, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawner: {fileID: 0}
   RotationPoint: {x: 0.5, y: 0.5, z: 0}
   PreviousTime: 0
-  FallTime: 0.8
+  FallTime: 0.4
 --- !u!1 &2862111936972279628
 GameObject:
   m_ObjectHideFlags: 0

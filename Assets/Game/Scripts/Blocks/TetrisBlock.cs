@@ -22,10 +22,9 @@ namespace Blocks
             }else if (Input.GetKeyDown(KeyCode.RightArrow)&& ValidMove(new Vector3(1, 0, 0)))
             {
                 transform.position += new Vector3(1, 0, 0);
-            }else if (Input.GetKeyDown(KeyCode.UpArrow))
+            }else if (Input.GetKeyDown(KeyCode.Space))
             {
-                transform.RotateAround(transform.TransformPoint(RotationPoint),new Vector3(0,0,1),90);
-                if(!ValidRotation()) transform.RotateAround(transform.TransformPoint(RotationPoint),new Vector3(0,0,1),-90);
+                RotateBlock();
             }
             if (Time.time - PreviousTime > (Input.GetKeyDown(KeyCode.DownArrow) ? FallTime/10 : FallTime) )
             {
@@ -76,6 +75,12 @@ namespace Blocks
                 if (roundedX < 0 || roundedX >= width || roundedY < 0 || roundedY >= height || grid[roundedX,roundedY] !=null) return false;
             }
             return true;
+        }
+        
+        public void RotateBlock()
+        {
+            transform.RotateAround(transform.TransformPoint(RotationPoint),new Vector3(0,0,1),90);
+            if(!ValidRotation()) transform.RotateAround(transform.TransformPoint(RotationPoint),new Vector3(0,0,1),-90);
         }
     }
 }
