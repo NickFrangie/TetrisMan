@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Game.Character
+namespace Game.Interaction
 {
     public class Interactable : MonoBehaviour
     {

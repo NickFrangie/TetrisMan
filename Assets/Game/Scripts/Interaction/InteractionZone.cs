@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.Character
+namespace Game.Interaction
 {
     [RequireComponent(typeof(Collider2D))]
     public class InteractionZone : MonoBehaviour
