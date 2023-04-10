@@ -83,8 +83,6 @@ MonoBehaviour:
   sightCheckLayer:
     serializedVersion: 2
     m_Bits: 1
-  inZone: []
-  focused: {fileID: 0}
 --- !u!61 &3080546430269311085
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -109,7 +107,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.75, y: 0.75}
+  m_Size: {x: 0.5, y: 0.5}
   m_EdgeRadius: 0
 --- !u!1 &6580196513060587868
 GameObject:
@@ -323,6 +321,9 @@ MonoBehaviour:
   groundCheckLayer:
     serializedVersion: 2
     m_Bits: 1
+  interactionZoneDistance: 1
+  interactionZonePoint: {fileID: 2851516218156946145}
+  gfxRoot: {fileID: 7218912695301562538}
 --- !u!114 &8544477953408795530
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -379,7 +380,19 @@ MonoBehaviour:
     m_ActionId: 8db1173d-c281-42f0-9eb2-326e3ebfeb4f
     m_ActionName: CharacterPlayer/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d,/XInputControllerWindows/leftStick,/XInputControllerWindows/dpad]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7218912695936979309}
+        m_TargetAssemblyTypeName: Game.Character.CharacterController, Assembly-CSharp
+        m_MethodName: Aim
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: fdbffad5-fe74-4b94-88f6-1489a4b34f87
     m_ActionName: CharacterPlayer/Aim[/XInputControllerWindows/rightStick,/Keyboard/upArrow,/Keyboard/downArrow,/Keyboard/leftArrow,/Keyboard/rightArrow]
   - m_PersistentCalls:

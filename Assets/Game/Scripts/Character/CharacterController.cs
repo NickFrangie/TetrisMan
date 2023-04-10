@@ -9,6 +9,7 @@ namespace Game.Character
     /// Character Control and Movement handling for the Platformer Character.
     /// Code adapted from tutorial: https://www.youtube.com/watch?v=KbtcEVCM7bw
     /// </summary>
+    [RequireComponent(typeof(Animator), typeof(Rigidbody2D))]
     public class CharacterController : MonoBehaviour
     {
         // Constants
@@ -33,7 +34,7 @@ namespace Game.Character
         [SerializeField] LayerMask groundCheckLayer = 0;
 
         // Internal
-        private Vector2 moveInput;
+        private Vector2 moveInput, aimInput;
         private float jumpTimer = 0;
         private float coyoteTimer = 0;
         private bool isJumping = true;
@@ -98,81 +99,92 @@ namespace Game.Character
         }
 
         #region Player Input
-            public void Move(InputAction.CallbackContext context) 
-            {
-                moveInput = context.ReadValue<Vector2>();
+        public void Move(InputAction.CallbackContext context) 
+        {
+            moveInput = context.ReadValue<Vector2>();
 
-                if (moveInput.x != 0) transform.localScale = new Vector2(Mathf.Sign(moveInput.x), 1);
-            }
+            if (moveInput.x != 0) transform.localScale = new Vector2(Mathf.Sign(moveInput.x), 1);
+        }
 
-            public void Jump(InputAction.CallbackContext context)
-            {
-                if (!context.canceled) {
-                    // Jump Start
-                    if ((isGrounded() || isCoyoteTime()) && !isJumping) {
-                        stageJump = true;
-                        animator.SetTrigger("Jumped");
-                    }
-                } else if (stageJump || isJumping) {
-                    // Jump Cancel
-                    stageJumpCancel = true;
+        public void Aim(InputAction.CallbackContext context)
+        {
+            if (context.performed) {
+                aimInput = context.ReadValue<Vector2>();
+            }   
+        }
+
+        public void Jump(InputAction.CallbackContext context)
+        {
+            if (!context.canceled) {
+                // Jump Start
+                if ((isGrounded() || isCoyoteTime()) && !isJumping) {
+                    stageJump = true;
+                    animator.SetTrigger("Jumped");
                 }
+            } else if (stageJump || isJumping) {
+                // Jump Cancel
+                stageJumpCancel = true;
             }
+        }
         #endregion
 
         #region Character Movement
-            /// <summary>
-            /// Applies force of jump.
-            /// </summary>
-            public void JumpForce()
-            {
-                stageJump = false;
-                rigidbody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-                isJumping = true;
-                jumpTimer = JUMP_BUFFER_TIME;
-            }
+        /// <summary>
+        /// Applies force of jump.
+        /// </summary>
+        public void JumpForce()
+        {
+            stageJump = false;
+            rigidbody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            isJumping = true;
+            jumpTimer = JUMP_BUFFER_TIME;
+        }
 
-            /// <summary>
-            /// Applies jump cut.
-            /// </summary>
-            public void JumpCancel()
-            {
-                stageJumpCancel = false;
-                if (rigidbody.velocity.y > 0) {
-                    rigidbody.AddForce(Vector2.down * rigidbody.velocity.y * (1 - jumpCutMultiplier), ForceMode2D.Impulse);
-                }
+        /// <summary>
+        /// Applies jump cut.
+        /// </summary>
+        public void JumpCancel()
+        {
+            stageJumpCancel = false;
+            if (rigidbody.velocity.y > 0) {
+                rigidbody.AddForce(Vector2.down * rigidbody.velocity.y * (1 - jumpCutMultiplier), ForceMode2D.Impulse);
             }
+        }
         #endregion
 
         #region Utility
-            /// <summary>
-            /// Checks whether the character is on the ground.
-            /// </summary>
-            /// <returns>Whether the character is on the ground.</returns>
-            private bool isGrounded()
-            {
-                return Physics2D.OverlapBox(groundCheckPoint.position, groundCheckSize, 0, groundCheckLayer);
-            }
+        /// <summary>
+        /// Checks whether the character is on the ground.
+        /// </summary>
+        /// <returns>Whether the character is on the ground.</returns>
+        private bool isGrounded()
+        {
+            return Physics2D.OverlapBox(groundCheckPoint.position, groundCheckSize, 0, groundCheckLayer);
+        }
 
-            /// <summary>
-            /// Checks whether coyote time is active, which determine whether a player is able to jump after falling off a platform.
-            /// </summary>
-            /// <returns>Whether coyote time is active.</returns>
-            private bool isCoyoteTime()
-            {
-                return (coyoteTimer > 0);
-            }
+        /// <summary>
+        /// Checks whether coyote time is active, which determine whether a player is able to jump after falling off a platform.
+        /// </summary>
+        /// <returns>Whether coyote time is active.</returns>
+        private bool isCoyoteTime()
+        {
+            return (coyoteTimer > 0);
+        }
         #endregion
 
         #region Debug
-            private void OnDrawGizmos() 
-            {
-                // Ground Check Box
-                if (groundCheckPoint) {
-                    Gizmos.color = Color.yellow;
-                    Gizmos.DrawWireCube(groundCheckPoint.position, groundCheckSize);    
-                }
+        private void OnDrawGizmos() 
+        {
+            // Ground Check Box
+            if (groundCheckPoint) {
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawWireCube(groundCheckPoint.position, groundCheckSize);    
             }
+
+            // Aiming Direction
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawRay(transform.position, aimInput);
+        }
         #endregion
     }
 }
