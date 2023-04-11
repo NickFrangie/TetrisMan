@@ -9,7 +9,7 @@ namespace Game.Blocks
         // Contants
         public const int HEIGHT = 20; 
         public const int WIDTH = 10;
-        public static Transform[,] grid = new Transform[WIDTH, HEIGHT];
+        public static IndividualBlock[,] grid = new IndividualBlock[WIDTH, HEIGHT];
         public static BlockManager Instance;
         
         public float FallTimeBuffer = .8f;
@@ -31,12 +31,12 @@ namespace Game.Blocks
         /// </summary>
         public void AddToGrid()
         {
-            foreach (Transform child in transform)
+            foreach (IndividualBlock block in transform)
             {
-                var position = child.transform.position;
+                Vector3 position = block.transform.position;
                 int roundedX = Mathf.RoundToInt(position.x );
                 int roundedY = Mathf.RoundToInt(position.y);
-                grid[roundedX, roundedY] = child;
+                grid[roundedX, roundedY] = block;
             }
         }
 

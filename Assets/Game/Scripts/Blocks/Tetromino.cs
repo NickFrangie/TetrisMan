@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Game.Blocks
 {
-    public class TetrisBlock : MonoBehaviour
+    public class Tetromino : MonoBehaviour
     {
         // Inspector
         public Vector3 RotationPoint;
@@ -105,6 +105,14 @@ namespace Game.Blocks
                     transform.RotateAround(transform.TransformPoint(RotationPoint),new Vector3(0,0,1),-90);
                 }
             }
+        #endregion
+
+        #region Debug
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(RotationPoint, .1f);
+        }
         #endregion
     }
 }

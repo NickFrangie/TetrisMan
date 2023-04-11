@@ -524,14 +524,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b05726775121d045a42f006c5e5150e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TetrisBlocks:
-  - {fileID: 870016233096560666, guid: 23878d6276a20f84dbb2d28737206abf, type: 3}
-  - {fileID: 4787970383236312108, guid: 2737b58eebc411d4caded6c7b99ae982, type: 3}
-  - {fileID: 3495360934679429564, guid: 5cf0a003d2ff30e4aa336475111335c6, type: 3}
-  - {fileID: 6241936730068469400, guid: cde6d808bc6acfa4596e3f7ef8fa362b, type: 3}
-  - {fileID: 472569380232564438, guid: 914847ebc7aa16646a04182cd6612fcb, type: 3}
-  - {fileID: 2862111935741539027, guid: a00b92812bdd6e547b3cb0d79031712d, type: 3}
-  - {fileID: 198513474574443485, guid: cd73daa749c0fd64da3281af836023c9, type: 3}
+  tetrominos:
+  - {fileID: 472569380232564439, guid: 914847ebc7aa16646a04182cd6612fcb, type: 3}
+  - {fileID: 6241936730068469401, guid: cde6d808bc6acfa4596e3f7ef8fa362b, type: 3}
+  - {fileID: 3495360934679429555, guid: 5cf0a003d2ff30e4aa336475111335c6, type: 3}
+  - {fileID: 2862111935741539024, guid: a00b92812bdd6e547b3cb0d79031712d, type: 3}
+  - {fileID: 870016233096560667, guid: 23878d6276a20f84dbb2d28737206abf, type: 3}
+  - {fileID: 198513474574443484, guid: cd73daa749c0fd64da3281af836023c9, type: 3}
+  - {fileID: 4787970383236312109, guid: 2737b58eebc411d4caded6c7b99ae982, type: 3}
   blockController: {fileID: 966977512}
 --- !u!1 &1682124658
 GameObject:

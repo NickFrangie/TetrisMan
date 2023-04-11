@@ -9,7 +9,7 @@ namespace Game.Blocks
     {
         // Inspector
         [Header("Spawning")]
-        public GameObject[] TetrisBlocks;
+        public Tetromino[] tetrominos;
         
         // Temporary (TODO: Remove !!!)
         public BlockController blockController;
@@ -22,11 +22,11 @@ namespace Game.Blocks
 
         public void SpawnBlock()
         {
-            GameObject block = Instantiate(TetrisBlocks[Random.Range(0, TetrisBlocks.Length)], transform.position, Quaternion.identity) as GameObject;
+            GameObject block = Instantiate(tetrominos[Random.Range(0, tetrominos.Length)].gameObject, transform.position, Quaternion.identity);
             
-            TetrisBlock tetrisBlock = block.GetComponent<TetrisBlock>();
-            tetrisBlock.spawner = this;
-            blockController.activeBlock = tetrisBlock; 
+            Tetromino tetromino = block.GetComponent<Tetromino>();
+            tetromino.spawner = this;
+            blockController.activeBlock = tetromino; 
         }
     }
 }

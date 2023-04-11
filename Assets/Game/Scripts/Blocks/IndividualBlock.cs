@@ -5,9 +5,9 @@ using UnityEngine;
 namespace Game.Blocks
 {
     /// <summary>
-    /// Script for individual Tetris Blocks
+    /// Script for individual Tetris Blocks.
     /// </summary>
-    public class BlockTemp : MonoBehaviour
+    public class IndividualBlock : MonoBehaviour
     {
         private void Update() 
         {

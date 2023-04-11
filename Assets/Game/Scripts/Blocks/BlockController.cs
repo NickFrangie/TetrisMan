@@ -18,7 +18,7 @@ namespace Game.Blocks
         // Internal
         private float xMoveTimer, yMoveTimer;
         private Vector2 moveInput;
-        internal TetrisBlock activeBlock;
+        internal Tetromino activeBlock;
 
 
         private void Update()
