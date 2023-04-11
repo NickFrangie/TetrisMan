@@ -32,6 +32,9 @@ namespace Game.Character
         [SerializeField] private Vector2 groundCheckSize = Vector2.one;
         [SerializeField] LayerMask groundCheckLayer = 0;
 
+        [Header("Interaction")]
+        [SerializeField] private Transform interactionPoint;
+
         // Internal
         private Vector2 moveInput;
         private float jumpTimer = 0;
@@ -39,7 +42,7 @@ namespace Game.Character
         private bool isJumping = true;
         private bool stageJump = false;
         private bool stageJumpCancel = false;
-        
+
         // References
         private Animator animator;
         private new Rigidbody2D rigidbody;
@@ -98,26 +101,28 @@ namespace Game.Character
         }
 
         #region Player Input
-            public void Move(InputAction.CallbackContext context) 
-            {
-                moveInput = context.ReadValue<Vector2>();
+        public void Move(InputAction.CallbackContext context) 
+        {
+            moveInput = context.ReadValue<Vector2>();
 
-                if (moveInput.x != 0) transform.localScale = new Vector2(Mathf.Sign(moveInput.x), 1);
+            if (moveInput.x != 0) {
+                transform.localScale = new Vector2(Mathf.Sign(moveInput.x), 1);
             }
+        }
 
-            public void Jump(InputAction.CallbackContext context)
-            {
-                if (!context.canceled) {
-                    // Jump Start
-                    if ((isGrounded() || isCoyoteTime()) && !isJumping) {
-                        stageJump = true;
-                        animator.SetTrigger("Jumped");
-                    }
-                } else if (stageJump || isJumping) {
-                    // Jump Cancel
-                    stageJumpCancel = true;
+        public void Jump(InputAction.CallbackContext context)
+        {
+            if (!context.canceled) {
+                // Jump Start
+                if ((isGrounded() || isCoyoteTime()) && !isJumping) {
+                    stageJump = true;
+                    animator.SetTrigger("Jumped");
                 }
+            } else if (stageJump || isJumping) {
+                // Jump Cancel
+                stageJumpCancel = true;
             }
+        }
         #endregion
 
         #region Character Movement
@@ -165,14 +170,20 @@ namespace Game.Character
         #endregion
 
         #region Debug
-            private void OnDrawGizmos() 
-            {
-                // Ground Check Box
-                if (groundCheckPoint) {
-                    Gizmos.color = Color.yellow;
-                    Gizmos.DrawWireCube(groundCheckPoint.position, groundCheckSize);    
-                }
+        private void OnDrawGizmos() 
+        {
+            // Ground Check Box
+            if (groundCheckPoint) {
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawWireCube(groundCheckPoint.position, groundCheckSize);    
             }
+
+            // Interaction Point
+            if (interactionPoint) {
+                Gizmos.color = Color.white;
+                Gizmos.DrawWireCube((Vector3) Vector3Int.RoundToInt(interactionPoint.position), Vector3.one); 
+            }
+        }
         #endregion
     }
 }

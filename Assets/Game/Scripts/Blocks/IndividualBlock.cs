@@ -7,6 +7,7 @@ namespace Game.Blocks
     /// <summary>
     /// Script for individual Tetris Blocks.
     /// </summary>
+    [ExecuteAlways]
     public class IndividualBlock : MonoBehaviour
     {
         private void Update() 
