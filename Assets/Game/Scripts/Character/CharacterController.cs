@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Game.Blocks;
 
 namespace Game.Character
 {
@@ -42,6 +43,7 @@ namespace Game.Character
         private bool isJumping = true;
         private bool stageJump = false;
         private bool stageJumpCancel = false;
+        private IndividualBlock heldBlock;
 
         // References
         private Animator animator;
@@ -123,50 +125,95 @@ namespace Game.Character
                 stageJumpCancel = true;
             }
         }
+
+        public void Interact(InputAction.CallbackContext context)
+        {
+            if (context.performed) {
+                if (heldBlock) {
+                    TryPlaceBlock();
+                } else {
+                    TryPickupBlock();
+                }
+            }
+        }
         #endregion
 
         #region Character Movement
-            /// <summary>
-            /// Applies force of jump.
-            /// </summary>
-            public void JumpForce()
-            {
-                stageJump = false;
-                rigidbody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-                isJumping = true;
-                jumpTimer = JUMP_BUFFER_TIME;
-            }
+        /// <summary>
+        /// Applies force of jump.
+        /// </summary>
+        public void JumpForce()
+        {
+            stageJump = false;
+            rigidbody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            isJumping = true;
+            jumpTimer = JUMP_BUFFER_TIME;
+        }
 
-            /// <summary>
-            /// Applies jump cut.
-            /// </summary>
-            public void JumpCancel()
-            {
-                stageJumpCancel = false;
-                if (rigidbody.velocity.y > 0) {
-                    rigidbody.AddForce(Vector2.down * rigidbody.velocity.y * (1 - jumpCutMultiplier), ForceMode2D.Impulse);
+        /// <summary>
+        /// Applies jump cut.
+        /// </summary>
+        public void JumpCancel()
+        {
+            stageJumpCancel = false;
+            if (rigidbody.velocity.y > 0) {
+                rigidbody.AddForce(Vector2.down * rigidbody.velocity.y * (1 - jumpCutMultiplier), ForceMode2D.Impulse);
+            }
+        }
+        #endregion
+
+        #region Interaction
+        private IndividualBlock CheckInteraction()
+        {
+            Collider2D[] colliders = Physics2D.OverlapBoxAll((Vector3) Vector3Int.RoundToInt(interactionPoint.position), 0.5f * Vector2.one, 0);
+            foreach (Collider2D collider in colliders) {
+                IndividualBlock block;
+                if (collider.TryGetComponent<IndividualBlock>(out block)) {
+                    return block;
                 }
             }
+            return null;
+        }
+
+        /// <summary>
+        /// Attempt to pickup the block near the interaction point. 
+        /// </summary>
+        /// <returns>Whether a block was picked up.</returns>
+        private bool TryPickupBlock()
+        {
+            Debug.Log(CheckInteraction());
+            return false;
+        }
+
+        /// <summary>
+        /// Attempt to place the block near the interaction point. 
+        /// </summary>
+        /// <returns>Whether a block was placed down.</returns>
+        private bool TryPlaceBlock()
+        {
+            Debug.Log(CheckInteraction());
+            return false;
+        }
         #endregion
 
         #region Utility
-            /// <summary>
-            /// Checks whether the character is on the ground.
-            /// </summary>
-            /// <returns>Whether the character is on the ground.</returns>
-            private bool isGrounded()
-            {
-                return Physics2D.OverlapBox(groundCheckPoint.position, groundCheckSize, 0, groundCheckLayer);
-            }
+        /// <summary>
+        /// Checks whether the character is on the ground.
+        /// </summary>
+        /// <returns>Whether the character is on the ground.</returns>
+        private bool isGrounded()
+        {
+            return Physics2D.OverlapBox(groundCheckPoint.position, groundCheckSize, 0, groundCheckLayer);
+        }
 
-            /// <summary>
-            /// Checks whether coyote time is active, which determine whether a player is able to jump after falling off a platform.
-            /// </summary>
-            /// <returns>Whether coyote time is active.</returns>
-            private bool isCoyoteTime()
-            {
-                return (coyoteTimer > 0);
-            }
+        /// <summary>
+        /// Checks whether coyote time is active, which determine whether a player is able to jump after falling off a platform.
+        /// </summary>
+        /// <returns>Whether coyote time is active.</returns>
+        private bool isCoyoteTime()
+        {
+            return (coyoteTimer > 0);
+        }
         #endregion
 
         #region Debug

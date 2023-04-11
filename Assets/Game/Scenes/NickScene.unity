@@ -216,30 +216,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7218912695936979310, guid: 2f48333f745dd5b45ae008096cb459b8, type: 3}
-      propertyPath: m_DefaultActionMap
-      value: Character
-      objectReference: {fileID: 0}
-    - target: {fileID: 7218912695936979310, guid: 2f48333f745dd5b45ae008096cb459b8, type: 3}
-      propertyPath: m_ActionEvents.Array.size
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7218912695936979310, guid: 2f48333f745dd5b45ae008096cb459b8, type: 3}
-      propertyPath: m_ActionEvents.Array.data[3].m_ActionId
-      value: b21f83fb-f79f-4df4-bd73-66b1e454e7cd
-      objectReference: {fileID: 0}
-    - target: {fileID: 7218912695936979310, guid: 2f48333f745dd5b45ae008096cb459b8, type: 3}
-      propertyPath: m_ActionEvents.Array.data[4].m_ActionId
-      value: 15aa9704-1cfc-4c24-bdfa-914baa853acf
-      objectReference: {fileID: 0}
-    - target: {fileID: 7218912695936979310, guid: 2f48333f745dd5b45ae008096cb459b8, type: 3}
-      propertyPath: m_ActionEvents.Array.data[3].m_ActionName
-      value: Blocks/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
-      objectReference: {fileID: 0}
-    - target: {fileID: 7218912695936979310, guid: 2f48333f745dd5b45ae008096cb459b8, type: 3}
-      propertyPath: m_ActionEvents.Array.data[4].m_ActionName
-      value: Blocks/Rotate[/Keyboard/space]
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2f48333f745dd5b45ae008096cb459b8, type: 3}
 --- !u!1001 &378663145
