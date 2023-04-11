@@ -87,7 +87,7 @@ namespace Game.Blocks
                     fallTimer = BlockManager.Instance.FallTimeBuffer;
                 } else {
                     // Lock Block
-                    BlockManager.Instance.AddToGrid();
+                    BlockManager.Instance.AddToGrid(this);
                     spawner.SpawnBlock();
                     this.enabled = false;
                 }
