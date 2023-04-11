@@ -5,25 +5,20 @@ namespace Game.Blocks
 {
     public class TetrisBlock : MonoBehaviour
     {
-        // Contants
-        private const float FALL_TIME_BUFFER = .8f;
-        
         // Inspector
         public Vector3 RotationPoint;
-        public static int height = 20;
-        public static int width = 10;
 
         // Internal
         private float fallTimer;
 
         // References
         internal Spawner spawner;
-        private static Transform[,] grid = new Transform[width, height];
+        
 
         
         private void Start() 
         {
-            fallTimer = FALL_TIME_BUFFER;    
+            fallTimer = BlockManager.Instance.FallTimeBuffer;    
         }
 
         private void Update()
@@ -36,17 +31,7 @@ namespace Game.Blocks
                 FallBlock();
             }
         }
-
-        void AddToGrid()
-        {
-            foreach (Transform child in transform)
-            {
-                var position = child.transform.position;
-                int roundedX = Mathf.RoundToInt(position.x );
-                int roundedY = Mathf.RoundToInt(position.y);
-                grid[roundedX, roundedY] = child;
-            }
-        }
+        
 
         #region Validation
            private bool ValidMove(Vector2 position)
@@ -57,7 +42,7 @@ namespace Game.Blocks
                     int roundedX = Mathf.RoundToInt(tempPos.x );
                     int roundedY = Mathf.RoundToInt(tempPos.y);
 
-                    if (roundedX < 0 || roundedX >= width || roundedY < 0 || roundedY >= height || grid[roundedX,roundedY] != null) return false;
+                    if (roundedX < 0 || roundedX >= BlockManager.WIDTH || roundedY < 0 || roundedY >= BlockManager.HEIGHT || BlockManager.grid[roundedX,roundedY] != null) return false;
                 }
                 return true;
             }
@@ -70,7 +55,7 @@ namespace Game.Blocks
                     int roundedX = Mathf.RoundToInt(position.x);
                     int roundedY = Mathf.RoundToInt(position.y);
 
-                    if (roundedX < 0 || roundedX >= width || roundedY < 0 || roundedY >= height || grid[roundedX,roundedY] != null) return false;
+                    if (roundedX < 0 || roundedX >= BlockManager.WIDTH || roundedY < 0 || roundedY >= BlockManager.HEIGHT || BlockManager.grid[roundedX,roundedY] != null) return false;
                 }
                 return true;
             }
@@ -95,34 +80,30 @@ namespace Game.Blocks
             /// Move the Tetris Block down, or into a locked position if movement is invalid.
             /// </summary>
             /// <returns>Returns true if the movement occurred, false if the block was locked.</returns>
-            public bool FallBlock()
+            public void FallBlock()
             {
                 if (MoveBlock(Vector2.down)) {
                     // Move Down
-                    fallTimer = FALL_TIME_BUFFER;
-                    return true;
+                    fallTimer = BlockManager.Instance.FallTimeBuffer;
                 } else {
                     // Lock Block
-                    AddToGrid();
+                    BlockManager.Instance.AddToGrid();
                     spawner.SpawnBlock();
                     this.enabled = false;
                 }
-                return false;
             }
 
             /// <summary>
             /// Rotate the Tetris Block.
             /// </summary>
             /// <returns>Whether the rotation succeeded.</returns>
-            public bool RotateBlock()
+            public void RotateBlock()
             {
                 transform.RotateAround(transform.TransformPoint(RotationPoint), new Vector3(0,0,1), 90);
 
                 if (!ValidRotation()) {
                     transform.RotateAround(transform.TransformPoint(RotationPoint),new Vector3(0,0,1),-90);
-                    return false;
                 }
-                return true;
             }
         #endregion
     }
