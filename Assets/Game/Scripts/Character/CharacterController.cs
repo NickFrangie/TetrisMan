@@ -43,6 +43,7 @@ namespace Game.Character
         private bool isJumping = true;
         private bool stageJump = false;
         private bool stageJumpCancel = false;
+        private IndividualBlock focusedBlock;
         private IndividualBlock heldBlock;
 
         // References
@@ -54,6 +55,16 @@ namespace Game.Character
         {
             animator = GetComponent<Animator>();
             rigidbody = GetComponent<Rigidbody2D>();
+        }
+
+        private void Update() 
+        {
+            IndividualBlock currentFocus = CheckInteraction();
+            if (currentFocus != focusedBlock) {
+                if (currentFocus) currentFocus.OnFocus();
+                if (focusedBlock) focusedBlock.OffFocus();
+                focusedBlock = currentFocus;
+            }    
         }
 
         private void FixedUpdate() 
@@ -181,7 +192,11 @@ namespace Game.Character
         /// <returns>Whether a block was picked up.</returns>
         private bool TryPickupBlock()
         {
-            CheckInteraction()?.OnFocus();
+            if (focusedBlock) {
+                heldBlock = focusedBlock;
+                heldBlock.gameObject.SetActive(false);
+                return true;
+            }
             return false;
         }
 
@@ -191,7 +206,12 @@ namespace Game.Character
         /// <returns>Whether a block was placed down.</returns>
         private bool TryPlaceBlock()
         {
-            CheckInteraction()?.OffFocus();
+            if (!focusedBlock) {
+                heldBlock.transform.position = Vector3Int.RoundToInt(interactionPoint.transform.position);
+                heldBlock.gameObject.SetActive(true);
+                heldBlock = null;
+                return true;
+            }
             return false;
         }
         #endregion
