@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1385226256057859003}
   - component: {fileID: 91979093887081258}
+  - component: {fileID: 6131274381512792944}
   m_Layer: 0
   m_Name: GFX
   m_TagString: Untagged
@@ -84,6 +85,22 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &6131274381512792944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6796450230753390130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce59f3ad8fef0b4469b64639574ec338, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 91979093887081258}
+  colors:
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 0, g: 0, b: 0, a: 1}
 --- !u!1 &7188754636226792903
 GameObject:
   m_ObjectHideFlags: 0
@@ -130,6 +147,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e702c90f252a162419580241d1e4ae90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onFocusEvents:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6131274381512792944}
+        m_TargetAssemblyTypeName: Game.Object.ColorSetter, Assembly-CSharp
+        m_MethodName: SetColor
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  offFocusEvents:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6131274381512792944}
+        m_TargetAssemblyTypeName: Game.Object.ColorSetter, Assembly-CSharp
+        m_MethodName: SetColor
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!61 &6684395717153756871
 BoxCollider2D:
   m_ObjectHideFlags: 0

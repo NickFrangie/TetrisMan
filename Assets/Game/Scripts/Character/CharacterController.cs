@@ -181,7 +181,7 @@ namespace Game.Character
         /// <returns>Whether a block was picked up.</returns>
         private bool TryPickupBlock()
         {
-            Debug.Log(CheckInteraction());
+            CheckInteraction()?.OnFocus();
             return false;
         }
 
@@ -191,7 +191,7 @@ namespace Game.Character
         /// <returns>Whether a block was placed down.</returns>
         private bool TryPlaceBlock()
         {
-            Debug.Log(CheckInteraction());
+            CheckInteraction()?.OffFocus();
             return false;
         }
         #endregion
