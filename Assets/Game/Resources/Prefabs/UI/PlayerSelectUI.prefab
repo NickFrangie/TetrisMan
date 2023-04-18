@@ -384,7 +384,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 150, y: 210}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &8135683628781530267
 MonoBehaviour:
@@ -398,9 +398,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aab1d811311369649a948489b7b14851, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerText: {fileID: 6065391730292607539}
+  statusText: {fileID: 6065391731503228439}
+  previewSpawnPoint: {fileID: 6065391730745827736}
   previewPrefabs:
   - {fileID: 971040717087901365, guid: b736ef90a173e144e88dccfd02323909, type: 3}
   - {fileID: 9089771396505473778, guid: 6fa8ae8b51079254fbdf46dd3cabb062, type: 3}
   - {fileID: 9089771396505473778, guid: 6fa8ae8b51079254fbdf46dd3cabb062, type: 3}
   - {fileID: 9089771396505473778, guid: 6fa8ae8b51079254fbdf46dd3cabb062, type: 3}
-  previewSpawnPoint: {fileID: 6065391730745827736}
