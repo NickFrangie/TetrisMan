@@ -134,6 +134,7 @@ namespace Game.Character
         {
             moveInput = context.ReadValue<Vector2>();
 
+            Debug.Log(moveInput);
             if (moveInput.x != 0) {
                 transform.localScale = new Vector2(Mathf.Sign(moveInput.x), 1);
             }
