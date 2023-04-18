@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Game.Blocks;
 
 namespace Game.Character
 {
@@ -32,6 +33,10 @@ namespace Game.Character
         [SerializeField] private Vector2 groundCheckSize = Vector2.one;
         [SerializeField] LayerMask groundCheckLayer = 0;
 
+        [Header("Interaction")]
+        [SerializeField] private GameObject placementBlockPrefab;
+        [SerializeField] private Transform interactionPoint;
+
         // Internal
         private Vector2 moveInput;
         private float jumpTimer = 0;
@@ -39,7 +44,10 @@ namespace Game.Character
         private bool isJumping = true;
         private bool stageJump = false;
         private bool stageJumpCancel = false;
-        
+        private IndividualBlock focusedBlock;
+        private IndividualBlock heldBlock;
+        private GameObject placementBlock;
+
         // References
         private Animator animator;
         private new Rigidbody2D rigidbody;
@@ -49,6 +57,30 @@ namespace Game.Character
         {
             animator = GetComponent<Animator>();
             rigidbody = GetComponent<Rigidbody2D>();
+        }
+
+        private void Start() 
+        {
+            // Spawn Placement Block
+            placementBlock = Instantiate(placementBlockPrefab.gameObject);
+            placementBlock.SetActive(false);
+        }
+
+        private void Update() 
+        {
+            IndividualBlock currentFocus = CheckInteraction();
+            if (heldBlock) {
+                placementBlock.SetActive(!currentFocus);
+                if (!currentFocus) {
+                    placementBlock.transform.position = Vector3Int.RoundToInt(interactionPoint.transform.position);
+                }
+            } else {
+                if (currentFocus != focusedBlock) {
+                    if (currentFocus) currentFocus.OnFocus();
+                    if (focusedBlock) focusedBlock.OffFocus();
+                }    
+            }
+            focusedBlock = currentFocus;
         }
 
         private void FixedUpdate() 
@@ -65,7 +97,7 @@ namespace Game.Character
             rigidbody.AddForce(movement * Vector2.right);
 
             // Grounded Information
-            if (isGrounded()){
+            if (isGrounded()) {
                 coyoteTimer = jumpCoyoteTime;
 
                 // Friction
@@ -98,81 +130,147 @@ namespace Game.Character
         }
 
         #region Player Input
-            public void Move(InputAction.CallbackContext context) 
-            {
-                moveInput = context.ReadValue<Vector2>();
+        public void Move(InputAction.CallbackContext context) 
+        {
+            moveInput = context.ReadValue<Vector2>();
 
-                if (moveInput.x != 0) transform.localScale = new Vector2(Mathf.Sign(moveInput.x), 1);
+            if (moveInput.x != 0) {
+                transform.localScale = new Vector2(Mathf.Sign(moveInput.x), 1);
             }
+        }
 
-            public void Jump(InputAction.CallbackContext context)
-            {
-                if (!context.canceled) {
-                    // Jump Start
-                    if ((isGrounded() || isCoyoteTime()) && !isJumping) {
-                        stageJump = true;
-                        animator.SetTrigger("Jumped");
-                    }
-                } else if (stageJump || isJumping) {
-                    // Jump Cancel
-                    stageJumpCancel = true;
+        public void Jump(InputAction.CallbackContext context)
+        {
+            if (!context.canceled) {
+                // Jump Start
+                if ((isGrounded() || isCoyoteTime()) && !isJumping) {
+                    stageJump = true;
+                    animator.SetTrigger("Jumped");
+                }
+            } else if (stageJump || isJumping) {
+                // Jump Cancel
+                stageJumpCancel = true;
+            }
+        }
+
+        public void Interact(InputAction.CallbackContext context)
+        {
+            if (context.performed) {
+                if (heldBlock) {
+                    TryPlaceBlock();
+                } else {
+                    TryPickupBlock();
                 }
             }
+        }
         #endregion
 
         #region Character Movement
-            /// <summary>
-            /// Applies force of jump.
-            /// </summary>
-            public void JumpForce()
-            {
-                stageJump = false;
-                rigidbody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-                isJumping = true;
-                jumpTimer = JUMP_BUFFER_TIME;
-            }
+        /// <summary>
+        /// Applies force of jump.
+        /// </summary>
+        public void JumpForce()
+        {
+            stageJump = false;
+            rigidbody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            isJumping = true;
+            jumpTimer = JUMP_BUFFER_TIME;
+        }
 
-            /// <summary>
-            /// Applies jump cut.
-            /// </summary>
-            public void JumpCancel()
-            {
-                stageJumpCancel = false;
-                if (rigidbody.velocity.y > 0) {
-                    rigidbody.AddForce(Vector2.down * rigidbody.velocity.y * (1 - jumpCutMultiplier), ForceMode2D.Impulse);
+        /// <summary>
+        /// Applies jump cut.
+        /// </summary>
+        public void JumpCancel()
+        {
+            stageJumpCancel = false;
+            if (rigidbody.velocity.y > 0) {
+                rigidbody.AddForce(Vector2.down * rigidbody.velocity.y * (1 - jumpCutMultiplier), ForceMode2D.Impulse);
+            }
+        }
+        #endregion
+
+        #region Interaction
+        private IndividualBlock CheckInteraction()
+        {
+            Collider2D[] colliders = Physics2D.OverlapBoxAll((Vector3) Vector3Int.RoundToInt(interactionPoint.position), 0.5f * Vector2.one, 0);
+            foreach (Collider2D collider in colliders) {
+                IndividualBlock block;
+                if (collider.TryGetComponent<IndividualBlock>(out block)) {
+                    return block;
                 }
             }
+            return null;
+        }
+
+        /// <summary>
+        /// Attempt to pickup the block near the interaction point. 
+        /// </summary>
+        /// <returns>Whether a block was picked up.</returns>
+        private bool TryPickupBlock()
+        {
+            if (focusedBlock) {
+                heldBlock = focusedBlock;
+                heldBlock.gameObject.SetActive(false);
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Attempt to place the block near the interaction point. 
+        /// </summary>
+        /// <returns>Whether a block was placed down.</returns>
+        private bool TryPlaceBlock()
+        {
+            if (!focusedBlock) {
+                // Hide Placement Block
+                placementBlock.gameObject.SetActive(false);
+
+                // Spawn Held Block
+                heldBlock.transform.position = Vector3Int.RoundToInt(interactionPoint.transform.position);
+                heldBlock.gameObject.SetActive(true);
+                heldBlock = null;
+                return true;
+            }
+            return false;
+        }
         #endregion
 
         #region Utility
-            /// <summary>
-            /// Checks whether the character is on the ground.
-            /// </summary>
-            /// <returns>Whether the character is on the ground.</returns>
-            private bool isGrounded()
-            {
-                return Physics2D.OverlapBox(groundCheckPoint.position, groundCheckSize, 0, groundCheckLayer);
-            }
+        /// <summary>
+        /// Checks whether the character is on the ground.
+        /// </summary>
+        /// <returns>Whether the character is on the ground.</returns>
+        private bool isGrounded()
+        {
+            return Physics2D.OverlapBox(groundCheckPoint.position, groundCheckSize, 0, groundCheckLayer);
+        }
 
-            /// <summary>
-            /// Checks whether coyote time is active, which determine whether a player is able to jump after falling off a platform.
-            /// </summary>
-            /// <returns>Whether coyote time is active.</returns>
-            private bool isCoyoteTime()
-            {
-                return (coyoteTimer > 0);
-            }
+        /// <summary>
+        /// Checks whether coyote time is active, which determine whether a player is able to jump after falling off a platform.
+        /// </summary>
+        /// <returns>Whether coyote time is active.</returns>
+        private bool isCoyoteTime()
+        {
+            return (coyoteTimer > 0);
+        }
         #endregion
 
         #region Debug
-            private void OnDrawGizmos() 
-            {
-                // Ground Check Box
-                if (groundCheckPoint) {
-                    Gizmos.color = Color.yellow;
-                    Gizmos.DrawWireCube(groundCheckPoint.position, groundCheckSize);    
-                }
+        private void OnDrawGizmos() 
+        {
+            // Ground Check Box
+            if (groundCheckPoint) {
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawWireCube(groundCheckPoint.position, groundCheckSize);    
             }
+
+            // Interaction Point
+            if (interactionPoint) {
+                Gizmos.color = Color.white;
+                Gizmos.DrawWireCube((Vector3) Vector3Int.RoundToInt(interactionPoint.position), Vector3.one); 
+            }
+        }
         #endregion
     }
 }
