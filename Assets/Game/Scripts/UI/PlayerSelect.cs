@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Game.Input;
 
 namespace Game.UI
 {
@@ -24,14 +25,14 @@ namespace Game.UI
 
 
         /// <summary>
-        /// Activates the Player Select according to the given player number.
+        /// Activates the Player Select according to the given player configuration.
         /// </summary>
-        /// <param name="player">The number of player activating the player select.</param>
-        public void ActivatePlayer(int player)
+        /// <param name="player"></param>
+        public void ActivatePlayer(PlayerConfiguration player)
         {
-            playerText.SetText($"Player {player}");
+            playerText.SetText($"Player {player.displayed}");
             statusText.SetText("Connected");
-            preview = SpawnPreviewPrefab(player);
+            preview = SpawnPreviewPrefab(player.number);
         }
 
         /// <summary>

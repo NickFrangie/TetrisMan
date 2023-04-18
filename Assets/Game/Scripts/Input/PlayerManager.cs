@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,6 +17,7 @@ namespace Game.Input
 
         // Internal
         private PlayerConfiguration[] players;
+        internal Action<PlayerConfiguration> playerJoinEvent, playerLeaveEvent;
 
         // References
         internal PlayerInputManager playerInputManager { get; private set; }
@@ -37,6 +39,9 @@ namespace Game.Input
         private void Start() 
         {
             players = new PlayerConfiguration[playerInputManager.maxPlayerCount];
+
+            // playerJoinEvent += (player) => Debug.Log($"Player {player.displayed} joined.");
+            // playerLeaveEvent += (player) => Debug.Log($"Player {player.displayed} left");
         }
 
         #region Connection
@@ -52,8 +57,8 @@ namespace Game.Input
             for (int i = 0; i < players.Length; i++) {
                 if (!players[i]) {
                     players[i] = player;
-                    player.number = i + 1;
-                    Debug.Log($"Player {player.number} joined.");
+                    player.number = i;
+                    playerJoinEvent?.Invoke(player);
                     break;
                 }
             }
@@ -66,9 +71,8 @@ namespace Game.Input
         public void PlayerLeft(PlayerInput playerInput) 
         {
             PlayerConfiguration player = playerInput.GetComponent<PlayerConfiguration>();
-            players[player.number - 1] = null;
-
-            Debug.Log($"Player {player.number} left");
+            players[player.number] = null;
+            playerLeaveEvent?.Invoke(player);
         }
         #endregion
     }

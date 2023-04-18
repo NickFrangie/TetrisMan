@@ -13,6 +13,7 @@ namespace Game.Input
     {
         // Internal
         internal int number = 0;
+        internal int displayed { get { return number + 1; } }
 
         // References
         internal PlayerInput playerInput { get; private set; }
