@@ -34,6 +34,7 @@ namespace Game.Character
         [SerializeField] LayerMask groundCheckLayer = 0;
 
         [Header("Interaction")]
+        [SerializeField] private GameObject placementBlockPrefab;
         [SerializeField] private Transform interactionPoint;
 
         // Internal
@@ -45,6 +46,7 @@ namespace Game.Character
         private bool stageJumpCancel = false;
         private IndividualBlock focusedBlock;
         private IndividualBlock heldBlock;
+        private GameObject placementBlock;
 
         // References
         private Animator animator;
@@ -57,14 +59,28 @@ namespace Game.Character
             rigidbody = GetComponent<Rigidbody2D>();
         }
 
+        private void Start() 
+        {
+            // Spawn Placement Block
+            placementBlock = Instantiate(placementBlockPrefab.gameObject);
+            placementBlock.SetActive(false);
+        }
+
         private void Update() 
         {
             IndividualBlock currentFocus = CheckInteraction();
-            if (currentFocus != focusedBlock) {
-                if (currentFocus) currentFocus.OnFocus();
-                if (focusedBlock) focusedBlock.OffFocus();
-                focusedBlock = currentFocus;
-            }    
+            if (heldBlock) {
+                placementBlock.SetActive(!currentFocus);
+                if (!currentFocus) {
+                    placementBlock.transform.position = Vector3Int.RoundToInt(interactionPoint.transform.position);
+                }
+            } else {
+                if (currentFocus != focusedBlock) {
+                    if (currentFocus) currentFocus.OnFocus();
+                    if (focusedBlock) focusedBlock.OffFocus();
+                }    
+            }
+            focusedBlock = currentFocus;
         }
 
         private void FixedUpdate() 
@@ -81,7 +97,7 @@ namespace Game.Character
             rigidbody.AddForce(movement * Vector2.right);
 
             // Grounded Information
-            if (isGrounded()){
+            if (isGrounded()) {
                 coyoteTimer = jumpCoyoteTime;
 
                 // Friction
@@ -207,6 +223,10 @@ namespace Game.Character
         private bool TryPlaceBlock()
         {
             if (!focusedBlock) {
+                // Hide Placement Block
+                placementBlock.gameObject.SetActive(false);
+
+                // Spawn Held Block
                 heldBlock.transform.position = Vector3Int.RoundToInt(interactionPoint.transform.position);
                 heldBlock.gameObject.SetActive(true);
                 heldBlock = null;

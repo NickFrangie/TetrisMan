@@ -277,6 +277,7 @@ MonoBehaviour:
   groundCheckLayer:
     serializedVersion: 2
     m_Bits: 1
+  placementBlockPrefab: {fileID: 7188754636226792903, guid: d330fa454020c7546930bc227df1aa86, type: 3}
   interactionPoint: {fileID: 5654003108768764600}
 --- !u!114 &8544477953408795530
 MonoBehaviour:
@@ -290,7 +291,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b705107b7178f841a229af9ecf91d44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectToSpawn: {fileID: 0}
+  objectToSpawn: {fileID: 7188754636226792902, guid: 1d9eee4ac23f85744a16b7f37e4b7898, type: 3}
   spawnPoint: {fileID: 7889395975627692721}
 --- !u!114 &7218912695936979310
 MonoBehaviour:
