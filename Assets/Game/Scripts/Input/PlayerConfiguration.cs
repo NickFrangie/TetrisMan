@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,6 +15,7 @@ namespace Game.Input
         // Internal
         internal int number = 0;
         internal int displayed { get { return number + 1; } }
+        internal Action confirmEvent;
 
         // References
         internal PlayerInput playerInput { get; private set; }
@@ -35,6 +37,13 @@ namespace Game.Input
             }
             playerInput.actions = null;
             Destroy(transform.gameObject);
+        }
+        #endregion
+
+        #region Input
+        public void Confirm(InputAction.CallbackContext context)
+        {
+            confirmEvent?.Invoke();
         }
         #endregion
     }

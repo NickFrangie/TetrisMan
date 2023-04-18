@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using Game.Input;
 
 namespace Game.UI
@@ -18,15 +20,33 @@ namespace Game.UI
         {
             PlayerManager.instance.playerJoinEvent += PlayerSelectJoin;
             PlayerManager.instance.playerLeaveEvent += PlayerSelectLeft;
+
+            PlayerManager.instance.playerJoinEvent += BindGameStart;
         }
 
         private void OnDestroy() 
         {
             PlayerManager.instance.playerJoinEvent -= PlayerSelectJoin;
             PlayerManager.instance.playerLeaveEvent -= PlayerSelectLeft;
+
+            PlayerManager.instance.playerJoinEvent -= BindGameStart;
         }
 
-        #region PlayerSelect
+        #region Game
+        public void StartGame()
+        {
+            if (PlayerManager.instance.ValidPlayers()) {
+                SceneManager.LoadScene("NickScene");
+            }
+        }
+
+        public void BindGameStart(PlayerConfiguration player) 
+        {
+            player.confirmEvent += StartGame;
+        }
+        #endregion
+
+        #region Connection
         private void PlayerSelectJoin(PlayerConfiguration player)
         {
             playerSelects[player.number].ActivatePlayer(player);

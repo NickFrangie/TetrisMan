@@ -107,7 +107,19 @@ MonoBehaviour:
     m_ActionId: d51660fb-08da-4b81-8c27-0ed6f9f8712a
     m_ActionName: Menu/Return[/Keyboard/escape,/XInputControllerWindows/select]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8297208805820299349}
+        m_TargetAssemblyTypeName: Game.Input.PlayerConfiguration, Assembly-CSharp
+        m_MethodName: Confirm
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 44663f54-3485-42ab-82c9-50e474c783dc
     m_ActionName: Menu/Confirm[/Keyboard/enter,/XInputControllerWindows/start]
   m_NeverAutoSwitchControlSchemes: 0

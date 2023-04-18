@@ -16,7 +16,7 @@ namespace Game.Input
         public static PlayerManager instance;
 
         // Internal
-        private PlayerConfiguration[] players;
+        internal PlayerConfiguration[] players { get; private set; }
         internal Action<PlayerConfiguration> playerJoinEvent, playerLeaveEvent;
 
         // References
@@ -73,6 +73,13 @@ namespace Game.Input
             PlayerConfiguration player = playerInput.GetComponent<PlayerConfiguration>();
             players[player.number] = null;
             playerLeaveEvent?.Invoke(player);
+        }
+        #endregion
+
+        #region Validation
+        public bool ValidPlayers() 
+        {
+            return true;
         }
         #endregion
     }
