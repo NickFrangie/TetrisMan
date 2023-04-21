@@ -15,6 +15,10 @@ namespace Game.Input
         // Static
         public static PlayerManager instance;
 
+        // Inspector
+        [Header("Prefabs")]
+        [SerializeField] private PlayerInput[] playerPrefabs;
+
         // Internal
         internal PlayerConfiguration[] players { get; private set; }
         internal Action<PlayerConfiguration> playerJoinEvent, playerLeaveEvent;
@@ -39,9 +43,6 @@ namespace Game.Input
         private void Start() 
         {
             players = new PlayerConfiguration[playerInputManager.maxPlayerCount];
-
-            // playerJoinEvent += (player) => Debug.Log($"Player {player.displayed} joined.");
-            // playerLeaveEvent += (player) => Debug.Log($"Player {player.displayed} left");
         }
 
         #region Connection
@@ -53,13 +54,16 @@ namespace Game.Input
         {
             playerInput.transform.SetParent(transform);
 
-            PlayerConfiguration player = playerInput.GetComponent<PlayerConfiguration>();
-            for (int i = 0; i < players.Length; i++) {
-                if (!players[i]) {
-                    players[i] = player;
-                    player.number = i;
-                    playerJoinEvent?.Invoke(player);
-                    break;
+            PlayerConfiguration player;
+            if (playerInput.TryGetComponent<PlayerConfiguration>(out player)) {
+                // New Player Configuration joined
+                for (int i = 0; i < players.Length; i++) {
+                    if (!players[i]) {
+                        players[i] = player;
+                        player.number = i;
+                        playerJoinEvent?.Invoke(player);
+                        break;
+                    }
                 }
             }
         }
@@ -71,12 +75,25 @@ namespace Game.Input
         public void PlayerLeft(PlayerInput playerInput) 
         {
             PlayerConfiguration player = playerInput.GetComponent<PlayerConfiguration>();
-            players[player.number] = null;
-            playerLeaveEvent?.Invoke(player);
+            if (player) {
+                // Player Configuration left
+                players[player.number] = null;
+                playerLeaveEvent?.Invoke(player);
+            }
         }
         #endregion
 
-        #region Validation
+        #region Instancing
+        public void SpawnPlayers()
+        {
+            foreach (PlayerConfiguration player in players) {
+                if (player) {
+                    GameObject playerPrefab = playerPrefabs[player.number].gameObject;
+                    player.SpawnGameInput(playerPrefab, "Character");
+                }
+            }
+        }
+
         public bool ValidPlayers() 
         {
             return true;

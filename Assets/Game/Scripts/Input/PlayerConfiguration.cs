@@ -18,12 +18,13 @@ namespace Game.Input
         internal Action confirmEvent;
 
         // References
-        internal PlayerInput playerInput { get; private set; }
+        internal PlayerInput playerConfigInput { get; private set; }
+        internal PlayerInput playerGameInput { get; private set; }
 
 
         private void Awake() 
         {
-            playerInput = GetComponent<PlayerInput>();
+            playerConfigInput = GetComponent<PlayerInput>();
         }
 
         #region Connection
@@ -32,11 +33,22 @@ namespace Game.Input
         /// </summary>
         public void Disconnect()
         {
-            foreach (InputDevice device in playerInput.devices) {
-                if (device != null) playerInput.user.UnpairDevice(device);
+            foreach (InputDevice device in playerConfigInput.devices) {
+                if (device != null) playerConfigInput.user.UnpairDevice(device);
             }
-            playerInput.actions = null;
+            playerConfigInput.actions = null;
             Destroy(transform.gameObject);
+        }
+
+        /// <summary>
+        /// Spawn a new game object with a player input for this player configuration.
+        /// </summary>
+        /// <param name="gameObject">The game object to spawn.</param>
+        /// <param name="controlScheme">The action map control scheme.</param>
+        internal void SpawnGameInput(GameObject gameObject, string controlScheme)
+        {
+            playerGameInput = PlayerInput.Instantiate(gameObject, playerConfigInput.playerIndex, controlScheme, -1, playerConfigInput.devices[0]);
+            playerConfigInput.enabled = false;
         }
         #endregion
 
