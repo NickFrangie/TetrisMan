@@ -59,13 +59,6 @@ namespace Game.Character
             rigidbody = GetComponent<Rigidbody2D>();
         }
 
-        private void Start() 
-        {
-            // Spawn Placement Block
-            placementBlock = Instantiate(placementBlockPrefab.gameObject);
-            placementBlock.SetActive(false);
-        }
-
         private void Update() 
         {
             IndividualBlock currentFocus = CheckInteraction();
@@ -211,6 +204,10 @@ namespace Game.Character
             if (focusedBlock) {
                 heldBlock = focusedBlock;
                 heldBlock.gameObject.SetActive(false);
+
+                // Spawn Placement Block if it does not exist
+                if (!placementBlock) placementBlock = Instantiate(placementBlockPrefab.gameObject);
+
                 return true;
             }
             return false;
