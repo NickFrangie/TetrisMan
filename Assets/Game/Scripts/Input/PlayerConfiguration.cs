@@ -44,10 +44,9 @@ namespace Game.Input
         /// Spawn a new game object with a player input for this player configuration.
         /// </summary>
         /// <param name="gameObject">The game object to spawn.</param>
-        /// <param name="controlScheme">The action map control scheme.</param>
-        internal void SpawnGameInput(GameObject gameObject, string controlScheme)
+        internal void SpawnGameInput(GameObject gameObject)
         {
-            playerGameInput = PlayerInput.Instantiate(gameObject, playerConfigInput.playerIndex, controlScheme, -1, playerConfigInput.devices[0]);
+            playerGameInput = PlayerInput.Instantiate(gameObject, playerConfigInput.playerIndex, pairWithDevice:playerConfigInput.devices[0]);
             playerConfigInput.enabled = false;
         }
         #endregion

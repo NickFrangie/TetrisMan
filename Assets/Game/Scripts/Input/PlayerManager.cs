@@ -89,14 +89,14 @@ namespace Game.Input
             foreach (PlayerConfiguration player in players) {
                 if (player) {
                     GameObject playerPrefab = playerPrefabs[player.number].gameObject;
-                    player.SpawnGameInput(playerPrefab, "Character");
+                    player.SpawnGameInput(playerPrefab);
                 }
             }
         }
 
         public bool ValidPlayers() 
         {
-            return true;
+            return players[0] != null;
         }
         #endregion
     }
