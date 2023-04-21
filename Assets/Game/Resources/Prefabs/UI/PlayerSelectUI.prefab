@@ -402,7 +402,7 @@ MonoBehaviour:
   statusText: {fileID: 6065391731503228439}
   previewSpawnPoint: {fileID: 6065391730745827736}
   previewPrefabs:
-  - {fileID: 971040717087901365, guid: b736ef90a173e144e88dccfd02323909, type: 3}
-  - {fileID: 9089771396505473778, guid: 6fa8ae8b51079254fbdf46dd3cabb062, type: 3}
-  - {fileID: 9089771396505473778, guid: 6fa8ae8b51079254fbdf46dd3cabb062, type: 3}
-  - {fileID: 9089771396505473778, guid: 6fa8ae8b51079254fbdf46dd3cabb062, type: 3}
+  - {fileID: 3773076454563687895, guid: c9a130c5a169e324ba6a62e594148b70, type: 3}
+  - {fileID: 5606176492553622229, guid: 25cc186945fc78d499af8f95e7dcb368, type: 3}
+  - {fileID: 6212086715389587383, guid: e159c6421cdf4ad4fa26ea6af3fe1e8e, type: 3}
+  - {fileID: 976803588085448721, guid: 506daab09be27f446b19849f4b6f04be, type: 3}
