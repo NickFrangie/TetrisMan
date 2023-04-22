@@ -16,6 +16,7 @@ namespace Game.Blocks
         
         public float FallTimeBuffer = .8f;
         private List<GameObject> BlockParents = new List<GameObject>();
+        public int LinesClearedThisRound = 0;
 
         void Awake()
         {
@@ -29,21 +30,19 @@ namespace Game.Blocks
             }
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-            CheckForLines();
-        }
-
         private void CheckForLines()
         {
             for (int i = HEIGHT-1; i >= 0; i--){
-                if(HasLine(i)){
+                if(HasLine(i))
+                {
+                    LinesClearedThisRound++;
                     ClearLine(i);
                     MoveDown(i);
                     DestroyEmptyParents();
                 }
             }
+            ScoreManager.Instance.LineCleared(LinesClearedThisRound);
+            LinesClearedThisRound = 0;
         }
 
         private bool HasLine(int index)
@@ -103,6 +102,8 @@ namespace Game.Blocks
                 int roundedY = Mathf.RoundToInt(position.y);
                 grid[roundedX, roundedY] = block;
             }
+            ScoreManager.Instance.BlockAddedToBoard();
+            CheckForLines();
         }
     }
 }
