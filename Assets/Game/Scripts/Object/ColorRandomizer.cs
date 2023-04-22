@@ -15,7 +15,7 @@ namespace Game.Object
 
 
         /// <summary>
-        /// Exposed method to spawn the desired object.
+        /// Exposed method to randomize the color between the specified range.
         /// </summary>
         public void RandomizeColor()
         {
