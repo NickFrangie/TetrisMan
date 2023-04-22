@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Game.Blocks
@@ -14,6 +15,7 @@ namespace Game.Blocks
         public static BlockManager Instance;
         
         public float FallTimeBuffer = .8f;
+        private List<GameObject> BlockParents = new List<GameObject>();
 
         void Awake()
         {
@@ -39,6 +41,7 @@ namespace Game.Blocks
                 if(HasLine(i)){
                     ClearLine(i);
                     MoveDown(i);
+                    DestroyEmptyParents();
                 }
             }
         }
@@ -56,8 +59,21 @@ namespace Game.Blocks
         {
             for (int j = 0; j<WIDTH; j++)
             {
+                GameObject parent = grid[j, index].transform.parent.gameObject;
+                if(!BlockParents.Contains(parent)) BlockParents.Add(parent);
                 Destroy(grid[j, index].gameObject);
                 grid[j, index] = null;
+            }
+        }
+
+        private void DestroyEmptyParents()
+        {
+            foreach (GameObject parent in BlockParents)
+            {
+                if (parent.transform.childCount == 0)
+                {
+                    Destroy(parent);
+                }
             }
         }
 
