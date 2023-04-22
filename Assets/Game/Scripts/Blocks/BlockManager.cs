@@ -30,7 +30,7 @@ namespace Game.Blocks
         // Update is called once per frame
         void Update()
         {
-            //CheckForLines();
+            CheckForLines();
         }
 
         private void CheckForLines()
@@ -45,21 +45,34 @@ namespace Game.Blocks
 
         private bool HasLine(int index)
         {
-            for (int i = WIDTH - 1; i >= 0; i--)
+            for (int j = 0; j<WIDTH; j++)
             {
-                if (grid[index,i] == null) return false;
+                if (grid[j,index] == null) return false;
             }
             return true;
         }
 
         private void ClearLine(int index)
         {
-            print($"Clear line {index}");
+            for (int j = 0; j<WIDTH; j++)
+            {
+                Destroy(grid[j, index].gameObject);
+                grid[j, index] = null;
+            }
         }
 
         private void MoveDown(int index)
         {
-            
+            for (int y = index; y < HEIGHT; y++){
+                for (int j = 0; j < WIDTH; j++){
+                    if(grid[j,y] != null)
+                    {
+                        grid[j, y - 1] = grid[j, y];
+                        grid[j, y] = null;
+                        grid[j, y - 1].transform.position -= new Vector3(0, 1, 0);
+                    }
+                }
+            }
         }
 
         /// <summary>
