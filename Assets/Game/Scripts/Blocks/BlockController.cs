@@ -21,6 +21,12 @@ namespace Game.Blocks
         internal Tetromino activeBlock;
 
 
+        private void Start() 
+        {
+            BlockManager.instance.spawner.blockController = this;
+            BlockManager.instance.spawner.SpawnBlock();
+        }
+
         private void Update()
         {
             // Timers

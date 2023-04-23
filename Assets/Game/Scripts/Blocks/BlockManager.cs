@@ -18,11 +18,14 @@ namespace Game.Blocks
         [SerializeField] private Vector2Int size;
         
         [Header("Spawner")]
-        [SerializeField] private Spawner spawner;
+        [SerializeField] internal Spawner spawner;
 
-        public float FallTimeBuffer = .8f;
+        [Header("Game Settings")]
+        [SerializeField] internal float FallTimeBuffer = .8f;
+
+        // Internal
         private List<GameObject> BlockParents = new List<GameObject>();
-        public int LinesClearedThisRound = 0;
+        internal int LinesClearedThisRound = 0;
 
 
         private void Awake()
@@ -157,8 +160,8 @@ namespace Game.Blocks
         /// <returns>Whether the position is in bounds.</returns>
         public bool PositionInBounds(Vector2Int position)
         {
-            return (position.x >= bottomLeft.x && position.x < bottomLeft.x + size.x
-                && position.y >= bottomLeft.y);
+            Vector2Int gridCoors = PositionToGrid(position);
+            return (gridCoors.x >= 0 && gridCoors.x < size.x && gridCoors.y >= 0);
         }
 
         /// <summary>

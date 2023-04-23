@@ -11,14 +11,9 @@ namespace Game.Blocks
         [Header("Spawning")]
         public Tetromino[] tetrominos;
         
-        // Temporary (TODO: Remove !!!)
-        public BlockController blockController;
+        // Internal
+        internal BlockController blockController;
         
-
-        void Start()
-        {
-            SpawnBlock();
-        }
 
         public void SpawnBlock()
         {

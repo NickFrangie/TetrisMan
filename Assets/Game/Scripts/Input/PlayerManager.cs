@@ -86,8 +86,9 @@ namespace Game.Input
         #region Instancing
         public void SpawnPlayers()
         {
+            playerInputManager.DisableJoining();
             foreach (PlayerConfiguration player in players) {
-                if (player) {
+                if (player != null) {
                     GameObject playerPrefab = playerPrefabs[player.number].gameObject;
                     player.SpawnGameInput(playerPrefab);
                 }
