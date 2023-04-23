@@ -205,6 +205,9 @@ namespace Game.Character
                 heldBlock = focusedBlock;
                 heldBlock.gameObject.SetActive(false);
 
+                // Grid Updates
+                BlockManager.instance.RemoveFromGrid(heldBlock);
+
                 // Spawn Placement Block if it does not exist
                 if (!placementBlock) placementBlock = Instantiate(placementBlockPrefab.gameObject);
 
@@ -226,6 +229,10 @@ namespace Game.Character
                 // Spawn Held Block
                 heldBlock.transform.position = Vector3Int.RoundToInt(interactionPoint.transform.position);
                 heldBlock.gameObject.SetActive(true);
+
+                // Block Manager
+                BlockManager.instance.AddToGrid(heldBlock);
+
                 heldBlock = null;
                 return true;
             }

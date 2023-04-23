@@ -104,10 +104,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: TetrisBlock (Blue)
       objectReference: {fileID: 0}
-    - target: {fileID: 4950565844219910630, guid: 925e049ec3139aa48b6823e4f63ff372, type: 3}
-      propertyPath: m_MaskInteraction
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 925e049ec3139aa48b6823e4f63ff372, type: 3}
 --- !u!4 &4530352851094327839 stripped

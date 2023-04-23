@@ -11,22 +11,21 @@ namespace Game.Blocks
         [Header("Spawning")]
         public Tetromino[] tetrominos;
         
-        // Temporary (TODO: Remove !!!)
-        public BlockController blockController;
+        // Internal
+        internal BlockController blockController;
         
-
-        void Start()
-        {
-            SpawnBlock();
-        }
 
         public void SpawnBlock()
         {
             GameObject block = Instantiate(tetrominos[Random.Range(0, tetrominos.Length)].gameObject, transform.position, Quaternion.identity);
             
             Tetromino tetromino = block.GetComponent<Tetromino>();
-            tetromino.spawner = this;
             blockController.activeBlock = tetromino; 
+        }
+
+        public void SpawnEnd()
+        {
+            blockController.activeBlock = null;
         }
     }
 }
