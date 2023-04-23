@@ -36,7 +36,7 @@ namespace Game.UI
         public void StartGame()
         {
             if (PlayerManager.instance.ValidPlayers()) {
-                SceneManager.LoadScene("NickScene");
+                SceneManager.LoadScene("Game");
             }
         }
 
