@@ -81,12 +81,19 @@ namespace Game.Blocks
 
         private void DestroyEmptyParents()
         {
+            List<GameObject> temp = new List<GameObject>();
             foreach (GameObject parent in BlockParents)
             {
                 if (parent.transform.childCount == 0)
                 {
-                    Destroy(parent);
+                    temp.Add(parent);
                 }
+            }
+
+            foreach (GameObject parent in temp)
+            {
+                BlockParents.Remove(parent);
+                Destroy(parent);
             }
         }
 
