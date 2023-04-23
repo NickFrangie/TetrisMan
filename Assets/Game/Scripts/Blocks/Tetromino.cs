@@ -11,14 +11,10 @@ namespace Game.Blocks
         // Internal
         private float fallTimer;
 
-        // References
-        internal Spawner spawner;
-        
-
         
         private void Start() 
         {
-            fallTimer = BlockManager.Instance.FallTimeBuffer;    
+            fallTimer = BlockManager.instance.FallTimeBuffer;    
         }
 
         private void Update()
@@ -34,28 +30,11 @@ namespace Game.Blocks
         
 
         #region Validation
-           private bool ValidMove(Vector2 position)
+            private bool ValidPosition()
             {
-                foreach (Transform child in transform)
-                {
-                    Vector2 tempPos = (Vector2) child.transform.position + position;
-                    int roundedX = Mathf.RoundToInt(tempPos.x );
-                    int roundedY = Mathf.RoundToInt(tempPos.y);
-
-                    if (roundedX < 0 || roundedX >= BlockManager.WIDTH || roundedY < 0 || roundedY >= BlockManager.HEIGHT || BlockManager.grid[roundedX,roundedY] != null) return false;
-                }
-                return true;
-            }
-
-            private bool ValidRotation()
-            {
-                foreach (Transform child in transform)
-                {
-                    Vector3 position = child.transform.position;
-                    int roundedX = Mathf.RoundToInt(position.x);
-                    int roundedY = Mathf.RoundToInt(position.y);
-
-                    if (roundedX < 0 || roundedX >= BlockManager.WIDTH || roundedY < 0 || roundedY >= BlockManager.HEIGHT || BlockManager.grid[roundedX,roundedY] != null) return false;
+                foreach (Transform child in transform) {
+                    Vector2Int blockPosition = Vector2Int.RoundToInt((Vector2) child.transform.position);
+                    if (!BlockManager.instance.PositionInBounds(blockPosition) || !BlockManager.instance.PositionIsFree(blockPosition)) return false;
                 }
                 return true;
             }
@@ -69,11 +48,13 @@ namespace Game.Blocks
             /// <returns>Whether the move succeeded.</returns>
             public bool MoveBlock(Vector2 direction)
             {
-                if (ValidMove(direction)) {
-                    transform.position += (Vector3) direction;
-                    return true;
+                transform.position += (Vector3) direction;
+
+                if (!ValidPosition()) {
+                    transform.position -= (Vector3) direction;
+                    return false;
                 }
-                return false;
+                return true;
             }
 
             /// <summary>
@@ -84,12 +65,11 @@ namespace Game.Blocks
             {
                 if (MoveBlock(Vector2.down)) {
                     // Move Down
-                    fallTimer = BlockManager.Instance.FallTimeBuffer;
+                    fallTimer = BlockManager.instance.FallTimeBuffer;
                 } else {
                     // Lock Block
-                    BlockManager.Instance.AddToGrid(this);
-                    spawner.SpawnBlock();
                     this.enabled = false;
+                    BlockManager.instance.AddToGrid(this);
                 }
             }
 
@@ -97,13 +77,15 @@ namespace Game.Blocks
             /// Rotate the Tetris Block.
             /// </summary>
             /// <returns>Whether the rotation succeeded.</returns>
-            public void RotateBlock()
+            public bool RotateBlock()
             {
                 transform.RotateAround(transform.TransformPoint(RotationPoint), new Vector3(0,0,1), 90);
 
-                if (!ValidRotation()) {
+                if (!ValidPosition()) {
                     transform.RotateAround(transform.TransformPoint(RotationPoint),new Vector3(0,0,1),-90);
+                    return false;
                 }
+                return true;
             }
         #endregion
 
