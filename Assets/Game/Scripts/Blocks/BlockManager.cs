@@ -104,32 +104,58 @@ namespace Game.Blocks
             }
         }
 
+        #region Grid Manipulation 
+        /// <summary>
+        /// Remove the individual block from the grid.
+        /// </summary>
+        /// <param name="block">Individual block to remove.</param>
+        public void RemoveFromGrid(IndividualBlock block)
+        {
+            Vector2Int position = Vector2Int.RoundToInt(block.transform.position);
+            Vector2Int gridCoors = PositionToGrid(position);
+            grid[gridCoors.x, gridCoors.y] = null;
+        }
+        
         /// <summary>
         /// Adds the tetromino blocks to their corresponding grid locations.
         /// </summary>
-        public void AddToGrid(Tetromino tetromino)
+        /// <param name="tetromino">Tetromino to add.</param>
+        /// <returns>Whether the game continues.</returns>
+        public bool AddToGrid(Tetromino tetromino)
         {
             foreach (IndividualBlock block in tetromino.GetComponentsInChildren<IndividualBlock>())
             {
-                Vector2Int position = Vector2Int.RoundToInt(block.transform.position);
-                Vector2Int gridCoors = PositionToGrid(position);
-
-                if (AboveGrid(gridCoors)) {
-                    // TODO: Game Over Handling !!!
-                    Debug.Log("Game Over!");
-                    spawner.SpawnEnd();
-                    return;
-                }
-                
-                grid[gridCoors.x, gridCoors.y] = block;
+                if (!AddToGrid(block)) return false;
             }
 
             ScoreManager.Instance.BlockAddedToBoard();
             CheckForLines();
             spawner.SpawnBlock();
+            return true;
         }
+        
+        /// <summary>
+        /// Adds an individual block to their corresponding grid location.
+        /// </summary>
+        /// <param name="block">Individual Block to add.</param>
+        public bool AddToGrid(IndividualBlock block)
+        {
+            Vector2Int position = Vector2Int.RoundToInt(block.transform.position);
+            Vector2Int gridCoors = PositionToGrid(position);
 
-        #region Conversion
+            if (AboveGrid(gridCoors)) {
+                // TODO: Game Over Handling !!!
+                Debug.Log("Game Over!");
+                spawner.SpawnEnd();
+                return false;
+            }
+            
+            grid[gridCoors.x, gridCoors.y] = block;
+            return true;
+        }
+        #endregion
+
+        #region Unit Conversion
         /// <summary>
         /// Converts the specified position to a grid coordinate pair.
         /// </summary>
