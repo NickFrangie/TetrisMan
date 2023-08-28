@@ -1,7 +1,8 @@
 # GameCI: https://game.ci/docs/github/activation
 name: Acquire activation file
 
-on: workflow_dispatch
+on:
+  workflow_dispatch: {}
 
 jobs:
   activation:
